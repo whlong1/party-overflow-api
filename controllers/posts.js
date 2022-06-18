@@ -26,7 +26,13 @@ const index = async (req, res) => {
 }
 
 
+const show = async (req, res) => {
+
+}
+
+
 export {
   index,
-  create
+  create,
+  show
 }
