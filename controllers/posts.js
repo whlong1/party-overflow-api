@@ -5,8 +5,8 @@ import { Post } from "../models/post.js";
 
 const create = async (req, res) => {
   try {
-    req.body.author = req.user.profile
     const post = await Post.create(req.body)
+    console.log('POST:', post)
     await Profile.updateOne(
       { _id: req.user.profile },
       { $push: { posts: post } }

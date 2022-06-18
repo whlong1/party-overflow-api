@@ -19,10 +19,16 @@ const decodeUserFromToken = (req, res, next) => {
 }
 
 function checkAuth(req, res, next) {
-  return req.user ? next() : res.status(401).json({ msg: 'Not Authorized'})
+  return req.user ? next() : res.status(401).json({ msg: 'Not Authorized' })
+}
+
+function attributeAuthor(req, res, next) {
+  if (req.method === 'POST') req.body.author = req.user.profile
+  next()
 }
 
 export {
   decodeUserFromToken,
-  checkAuth
+  checkAuth,
+  attributeAuthor
 }
