@@ -17,6 +17,11 @@ app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
 
+app.use(function (req, res, next) {
+  for (let key in req.body) req.body[key] === '' && delete req.body[key]
+  next()
+})
+
 app.use('/api/profiles', profilesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/posts', postsRouter)

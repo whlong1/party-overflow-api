@@ -2,6 +2,23 @@ import { Profile } from "../models/profile.js";
 import { Post } from "../models/post.js";
 
 
+
+const create = async (req, res) => {
+  try {
+    console.log('Remove Empty Fields', req.body)
+    req.body.added_by = req.user.profile
+    const post = await Post.create(req.body)
+    await Profile.updateOne(
+      { _id: req.user.profile },
+      { $push: { posts: post } }
+    )
+    return res.status(201).json(post)
+  } catch (err) {
+    return res.status(500).json(err)
+  }
+}
+
+
 const index = async (req, res) => {
   try {
     const posts = await Post.find({})
@@ -16,4 +33,5 @@ const index = async (req, res) => {
 
 export {
   index,
+  create
 }

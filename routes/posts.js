@@ -10,6 +10,7 @@ router.get('/', postCtrl.index)
 
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
+router.post('/', checkAuth, postCtrl.create)
 
 
 export {
