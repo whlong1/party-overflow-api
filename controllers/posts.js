@@ -1,12 +1,9 @@
 import { Profile } from "../models/profile.js";
 import { Post } from "../models/post.js";
 
-
-
 const create = async (req, res) => {
   try {
     const post = await Post.create(req.body)
-    console.log('POST:', post)
     await Profile.updateOne(
       { _id: req.user.profile },
       { $push: { posts: post } }
@@ -17,11 +14,10 @@ const create = async (req, res) => {
   }
 }
 
-
 const index = async (req, res) => {
   try {
     const posts = await Post.find({})
-      .populate('added_by')
+      .populate('author')
       .sort({ createdAt: 'desc' })
     return res.status(200).json(posts)
   } catch (err) {
