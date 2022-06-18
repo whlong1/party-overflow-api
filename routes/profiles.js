@@ -4,8 +4,9 @@ import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 
 const router = Router()
 
-// GET /api/profiles/
 /*---------- Public Routes ----------*/
+
+
 
 /*---------- Protected Routes ----------*/
 router.use(decodeUserFromToken)
