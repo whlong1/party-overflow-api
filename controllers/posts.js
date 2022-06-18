@@ -1,5 +1,5 @@
-import { Profile } from "../models/profile.js";
-import { Post } from "../models/post.js";
+import { Profile } from "../models/profile.js"
+import { Post } from "../models/post.js"
 
 const create = async (req, res) => {
   try {
