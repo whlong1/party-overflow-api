@@ -5,8 +5,7 @@ import { Post } from "../models/post.js";
 
 const create = async (req, res) => {
   try {
-    console.log('Remove Empty Fields', req.body)
-    req.body.added_by = req.user.profile
+    req.body.author = req.user.profile
     const post = await Post.create(req.body)
     await Profile.updateOne(
       { _id: req.user.profile },

@@ -16,7 +16,7 @@ const commentSchema = new Schema(
       type: Boolean,
       default: false
     },
-    commenter: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }
   },
   { timestamps: true }
 )
@@ -34,7 +34,7 @@ const postSchema = new Schema({
     type: Boolean,
     default: false
   },
-  added_by: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
   comments: [commentSchema]
 }, { timestamps: true })
 
