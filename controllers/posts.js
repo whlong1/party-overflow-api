@@ -7,7 +7,6 @@ const index = async (req, res) => {
     const posts = await Post.find({})
       .populate('added_by')
       .sort({ createdAt: 'desc' })
-
     return res.status(200).json(posts)
   } catch (err) {
     return res.status(500).json(err)
