@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const commentSchema = new Schema(
   {
-    comment_text: {
+    text: {
       type: String,
       required: true
     },
@@ -12,7 +12,7 @@ const commentSchema = new Schema(
       type: String,
       required: false
     },
-    is_solution: {
+    solution: {
       type: Boolean,
       default: false
     },
@@ -22,7 +22,7 @@ const commentSchema = new Schema(
 )
 
 const postSchema = new Schema({
-  question: {
+  text: {
     type: String,
     required: true
   },
@@ -30,7 +30,7 @@ const postSchema = new Schema({
     type: String,
     required: false
   },
-  is_resolved: {
+  resolved: {
     type: Boolean,
     default: false
   },

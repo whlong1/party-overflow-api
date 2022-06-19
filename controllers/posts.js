@@ -37,13 +37,21 @@ const show = async (req, res) => {
 }
 
 
-const update = async () => {
+const update = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.params.id, { resolved: true }, { new: true }
+    ).populate('author')
+    return res.status(200).json(post)
+  } catch (err) {
+    return res.status(500).json(err)
+  }
 
 }
 
 export {
   index,
   create,
-  show, 
+  show,
   update
 }
