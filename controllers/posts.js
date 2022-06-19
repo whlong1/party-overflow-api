@@ -36,7 +36,6 @@ const show = async (req, res) => {
   }
 }
 
-
 const update = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -52,9 +51,14 @@ const update = async (req, res) => {
   }
 }
 
+const deletePost = async (req, res) => {
+
+}
+
 export {
   index,
   create,
   show,
-  update
+  update,
+  deletePost as delete
 }
