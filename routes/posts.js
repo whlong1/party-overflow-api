@@ -12,6 +12,7 @@ router.get('/:id', postCtrl.show)
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, attributeAuthor, postCtrl.create)
+router.put('/:id', checkAuth, postCtrl.update)
 
 
 export {

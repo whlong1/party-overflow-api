@@ -36,8 +36,14 @@ const show = async (req, res) => {
   }
 }
 
+
+const update = async () => {
+
+}
+
 export {
   index,
   create,
-  show
+  show, 
+  update
 }
