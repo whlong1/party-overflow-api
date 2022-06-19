@@ -38,8 +38,6 @@ const postSchema = new Schema({
   comments: [commentSchema]
 }, { timestamps: true })
 
-
-
 const Post = mongoose.model('Post', postSchema)
 
 export {

@@ -39,14 +39,17 @@ const show = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(
-      req.params.id, { resolved: true }, { new: true }
-    ).populate('author')
-    return res.status(200).json(post)
+    const post = await Post.findById(req.params.id)
+    if (post.author.equals(req.user.profile)) {
+      post.resolved = true
+      await post.save()
+      return res.status(200).json(post)
+    } else {
+      return res.status(401).json({ err: 'Unauthorized' })
+    }
   } catch (err) {
     return res.status(500).json(err)
   }
-
 }
 
 export {
