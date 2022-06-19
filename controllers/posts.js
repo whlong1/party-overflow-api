@@ -50,13 +50,19 @@ const update = async (req, res) => {
     return res.status(500).json(err)
   }
 }
+
 const deletePost = async (req, res) => {
   try {
-    await Post.findByIdAndDelete(req.params.id)
-    const profile = await Profile.findById(req.user.profile)
-    profile.posts.remove({ _id: req.params.id })
-    await profile.save()
-    return res.status(204).end()
+    const post = await Post.findById(req.params.id)
+    if (post.author.equals(req.user.profile)) {
+      await Post.deleteOne({ _id: req.params.id })
+      const profile = await Profile.findById(req.user.profile)
+      profile.posts.remove({ _id: req.params.id })
+      await profile.save()
+      return res.status(200).send('OK')
+    } else {
+      return res.status(401).json({ err: 'Unauthorized' })
+    }
   } catch (err) {
     return res.status(500).json(err)
   }
