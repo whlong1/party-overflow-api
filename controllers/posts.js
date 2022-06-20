@@ -70,7 +70,21 @@ const deletePost = async (req, res) => {
 
 
 const createComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    post.comments.push(req.body)
+    await post.save()
+    const newComment = post.comments[post.comments.length - 1]
+    console.log(req.user.profile)
 
+    // Append profile data
+    const profile = await Profile.findById(req.user.profile)
+    newComment.author = profile
+
+    return res.status(201).json(newComment)
+  } catch (err) {
+    res.status(500).json(err)
+  }
 }
 
 
