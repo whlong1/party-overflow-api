@@ -68,10 +68,18 @@ const deletePost = async (req, res) => {
   }
 }
 
+
+const createComment = async (req, res) => {
+
+}
+
+
 export {
   index,
   create,
   show,
   update,
-  deletePost as delete
+  deletePost as delete,
+
+  createComment
 }
