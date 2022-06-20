@@ -1,12 +1,12 @@
 import { Profile } from "../models/profile.js";
 
-function index(req, res) {
-  Profile.find({})
-  .then(profiles => res.json(profiles))
-  .catch(err => {
-    console.log(err)
+const index = async (req, res) => {
+  try {
+    const profiles = await Profile.find({})
+    res.status(200).json(profiles)
+  } catch (err) {
     res.status(500).json(err)
-  })
+  }
 }
 
 export {
