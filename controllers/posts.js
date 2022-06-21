@@ -39,13 +39,13 @@ const show = async (req, res) => {
 const update = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    if (post.author.equals(req.user.profile)) {
-      post.resolved = true
-      await post.save()
-      res.status(200).json(post)
-    } else {
+    if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ err: 'Unauthorized' })
     }
+
+    post.resolved = true
+    await post.save()
+    res.status(200).json(post)
   } catch (err) {
     res.status(500).json(err)
   }
@@ -68,14 +68,12 @@ const deletePost = async (req, res) => {
   }
 }
 
-
 const createComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     post.comments.push(req.body)
     await post.save()
     const newComment = post.comments[post.comments.length - 1]
-    console.log(req.user.profile)
 
     // Append profile data
     const profile = await Profile.findById(req.user.profile)
@@ -86,6 +84,9 @@ const createComment = async (req, res) => {
     res.status(500).json(err)
   }
 }
+
+
+
 
 
 export {
