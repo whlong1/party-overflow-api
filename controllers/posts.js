@@ -41,11 +41,11 @@ const update = async (req, res) => {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ err: 'Unauthorized' })
+    } else {
+      post.resolved = true
+      await post.save()
+      res.status(200).json(post)
     }
-
-    post.resolved = true
-    await post.save()
-    res.status(200).json(post)
   } catch (err) {
     res.status(500).json(err)
   }
@@ -56,12 +56,12 @@ const deletePost = async (req, res) => {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ err: 'Unauthorized' })
+    } else {
+      await Post.deleteOne({ _id: req.params.id })
+      const profile = await Profile.findById(req.user.profile)
+      profile.posts.remove({ _id: req.params.id })
+      await profile.save()
     }
-
-    await Post.deleteOne({ _id: req.params.id })
-    const profile = await Profile.findById(req.user.profile)
-    profile.posts.remove({ _id: req.params.id })
-    await profile.save()
     res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
