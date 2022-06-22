@@ -86,10 +86,24 @@ const createComment = async (req, res) => {
   }
 }
 
-
-
 const markCommentAsSolution = async (req, res) => {
-  res.status(200).send('OK')
+  try {
+    const post = await Post.findById(req.params.postId)
+      .populate('added_by').populate('comments.commenter')
+
+    const comment = post.comments.id(req.params.commentId)
+
+    if (!comment.author.equals(req.user.profile)) {
+      res.status(401).json({ err: 'Unauthorized' })
+    } else {
+      post.is_resolved = true
+      comment.is_solution = true
+      await post.save()
+      return res.status(200).json(post)
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
 }
 
 
