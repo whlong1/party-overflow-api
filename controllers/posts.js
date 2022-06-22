@@ -89,9 +89,13 @@ const createComment = async (req, res) => {
 
 
 const markCommentAsSolution = async (req, res) => {
-
+  res.status(200).send('OK')
 }
 
+
+const deleteComment = async (req, res) => {
+  res.status(200).send('OK')
+}
 
 
 
@@ -103,5 +107,6 @@ export {
   deletePost as delete,
 
   createComment,
-  markCommentAsSolution
+  markCommentAsSolution,
+  deleteComment
 }
