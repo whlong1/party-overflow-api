@@ -40,7 +40,8 @@ const update = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ err: 'Unauthorized' })
+      throw new Error('Unauthorized')
+      // res.status(401).json({ err: 'Unauthorized' })
     } else {
       post.resolved = true
       await post.save()
@@ -87,6 +88,11 @@ const createComment = async (req, res) => {
 
 
 
+const markCommentAsSolution = async (req, res) => {
+
+}
+
+
 
 
 export {
@@ -96,5 +102,6 @@ export {
   update,
   deletePost as delete,
 
-  createComment
+  createComment,
+  markCommentAsSolution
 }
