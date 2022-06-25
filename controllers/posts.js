@@ -41,7 +41,6 @@ const update = async (req, res) => {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
       throw new Error('Unauthorized')
-      // res.status(401).json({ err: 'Unauthorized' })
     } else {
       post.resolved = true
       await post.save()
@@ -56,7 +55,7 @@ const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ err: 'Unauthorized' })
+      throw new Error('Unauthorized')
     } else {
       await post.delete()
       const profile = await Profile.findById(req.user.profile)
@@ -94,7 +93,7 @@ const markCommentAsSolution = async (req, res) => {
     const comment = post.comments.id(req.params.commentId)
 
     if (!comment.author.equals(req.user.profile)) {
-      res.status(401).json({ err: 'Unauthorized' })
+      throw new Error('Unauthorized')
     } else {
       post.is_resolved = true
       comment.is_solution = true
@@ -112,7 +111,7 @@ const deleteComment = async (req, res) => {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      res.status(401).json({ err: 'Unauthorized' })
+      throw new Error('Unauthorized')
     } else {
       post.comments.remove({ _id: req.params.commentId })
       await post.save()
