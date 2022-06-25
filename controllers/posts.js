@@ -36,11 +36,11 @@ const show = async (req, res) => {
   }
 }
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      return next({message: 'Unauthorized', status: 401})
+      return next({ message: 'Unauthorized', status: 401 })
     } else {
       post.resolved = true
       await post.save()
@@ -52,11 +52,10 @@ const update = async (req, res) => {
 }
 
 const deletePost = async (req, res, next) => {
-  console.log(next)
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      return next({message: 'Unauthorized', status: 401})
+      return next({ message: 'Unauthorized', status: 401 })
     } else {
       await post.delete()
       const profile = await Profile.findById(req.user.profile)
@@ -83,13 +82,13 @@ const createComment = async (req, res) => {
   }
 }
 
-const updateComment = async (req, res) => {
+const updateComment = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
       .populate('added_by').populate('comments.commenter')
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      return next({message: 'Unauthorized', status: 401})
+      return next({ message: 'Unauthorized', status: 401 })
     } else {
       await Profile.updateOne(
         { _id: req.user.profile },
@@ -106,12 +105,12 @@ const updateComment = async (req, res) => {
   }
 }
 
-const deleteComment = async (req, res) => {
+const deleteComment = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      return next({message: 'Unauthorized', status: 401})
+      return next({ message: 'Unauthorized', status: 401 })
     } else {
       post.comments.remove({ _id: req.params.commentId })
       await post.save()
