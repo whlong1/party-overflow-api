@@ -82,7 +82,7 @@ const createComment = async (req, res) => {
   }
 }
 
-const markCommentAsSolution = async (req, res) => {
+const updateComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId)
       .populate('added_by').populate('comments.commenter')
@@ -129,6 +129,6 @@ export {
   deletePost as delete,
 
   createComment,
-  markCommentAsSolution,
+  updateComment,
   deleteComment
 }
