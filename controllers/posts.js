@@ -80,7 +80,7 @@ const createComment = async (req, res) => {
     const profile = await Profile.findById(req.user.profile)
     newComment.author = profile
 
-    return res.status(201).json(newComment)
+    res.status(201).json(newComment)
   } catch (err) {
     res.status(500).json(err)
   }
@@ -99,7 +99,7 @@ const markCommentAsSolution = async (req, res) => {
       post.is_resolved = true
       comment.is_solution = true
       await post.save()
-      return res.status(200).json(post)
+      res.status(200).json(post)
     }
   } catch (err) {
     res.status(500).json(err)
@@ -109,6 +109,19 @@ const markCommentAsSolution = async (req, res) => {
 
 const deleteComment = async (req, res) => {
   res.status(200).send('OK')
+  try {
+    const post = await Post.findById(req.params.postId)
+    const comment = post.comments.id(req.params.commentId)
+    if (!comment.author.equals(req.user.profile)) {
+      res.status(401).json({ err: 'Unauthorized' })
+    } else {
+      post.comments.remove({ _id: req.params.commentId })
+      await post.save()
+      res.status(200).send('OK')
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
 }
 
 
