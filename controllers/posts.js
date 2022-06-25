@@ -58,7 +58,7 @@ const deletePost = async (req, res) => {
     if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ err: 'Unauthorized' })
     } else {
-      await Post.deleteOne({ _id: req.params.id })
+      await post.delete()
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
       await profile.save()
@@ -108,7 +108,6 @@ const markCommentAsSolution = async (req, res) => {
 
 
 const deleteComment = async (req, res) => {
-  res.status(200).send('OK')
   try {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
