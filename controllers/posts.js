@@ -90,8 +90,13 @@ const markCommentAsSolution = async (req, res) => {
     if (!comment.author.equals(req.user.profile)) {
       throw new Error('Unauthorized')
     } else {
+      await Profile.updateOne(
+        { _id: req.user.profile },
+        { $inc: { solution_count: 1 } }
+      )
       post.is_resolved = true
       comment.is_solution = true
+
       await post.save()
       res.status(200).json(post)
     }
