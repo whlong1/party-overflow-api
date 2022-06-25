@@ -15,6 +15,11 @@ const profileSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  solution_count: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, {
   timestamps: true,
