@@ -18,6 +18,8 @@ const index = async (req, res) => {
   try {
     const posts = await Post.find({})
       .populate('author')
+      .limit(10)
+      .skip(parseInt(req.params.page) * 10)
       .sort({ createdAt: 'desc' })
     res.status(200).json(posts)
   } catch (err) {
