@@ -53,7 +53,7 @@ const update = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id)
+    const post = await Post.findById(req.params.idd)
     if (!post.author.equals(req.user.profile)) {
       throw new Error('Unauthorized')
     } else {
@@ -74,11 +74,8 @@ const createComment = async (req, res) => {
     post.comments.push(req.body)
     await post.save()
     const newComment = post.comments[post.comments.length - 1]
-
-    // Append profile data
     const profile = await Profile.findById(req.user.profile)
     newComment.author = profile
-
     res.status(201).json(newComment)
   } catch (err) {
     res.status(500).json(err)
@@ -89,9 +86,7 @@ const markCommentAsSolution = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId)
       .populate('added_by').populate('comments.commenter')
-
     const comment = post.comments.id(req.params.commentId)
-
     if (!comment.author.equals(req.user.profile)) {
       throw new Error('Unauthorized')
     } else {
@@ -104,7 +99,6 @@ const markCommentAsSolution = async (req, res) => {
     res.status(500).json(err)
   }
 }
-
 
 const deleteComment = async (req, res) => {
   try {
@@ -121,8 +115,6 @@ const deleteComment = async (req, res) => {
     res.status(500).json(err)
   }
 }
-
-
 
 export {
   index,
