@@ -16,14 +16,15 @@ const create = async (req, res) => {
 
 const index = async (req, res) => {
   try {
-    const { search, page, limit } = req.query
+    const { search, page, limit, sort } = req.query
     const fields = 'text codeblock solution author'
     const filter = { text: { $regex: search, $options: 'i' } }
+    const order = { recent: { createdAt: 'desc' }, popular: { comments: 'desc' } }
     const posts = await Post.find(search ? filter : {}, fields)
       .limit(limit)
-      .sort({ createdAt: 'desc' })
       .skip(parseInt(page) * limit)
       .populate('author', 'name avatar')
+      .sort(sort ? order[sort] : order.recent)
     res.status(200).json(posts)
   } catch (err) {
     res.status(500).json(err)
@@ -32,9 +33,9 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const count = 3
+    const limit = 3
     const page = req.query.page ? req.query.page : 0
-    const post = await Post.findById(req.params.id, { comments: { $slice: [page, count] } })
+    const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
       .populate('author', 'name avatar')
       .populate('comments.author', 'name avatar')
     res.status(200).json(post)
