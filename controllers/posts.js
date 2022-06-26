@@ -130,7 +130,6 @@ export {
   show,
   update,
   deletePost as delete,
-
   createComment,
   updateComment,
   deleteComment
