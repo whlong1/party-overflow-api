@@ -32,7 +32,9 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id)
+    const count = 3
+    const page = req.query.page ? req.query.page : 0
+    const post = await Post.findById(req.params.id, { comments: { $slice: [page, count] } })
       .populate('author', 'name avatar')
       .populate('comments.author', { select: 'name avatar' })
     res.status(200).json(post)
