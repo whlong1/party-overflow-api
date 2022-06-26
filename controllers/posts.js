@@ -16,11 +16,12 @@ const create = async (req, res) => {
 
 const index = async (req, res) => {
   try {
-    const posts = await Post.find({})
+    const filter = { text: { $regex: req.query.search, $options: 'i' } }
+    const posts = await Post.find(req.query.search ? filter : {})
+      .limit(3)
       .populate('author')
-      .limit(10)
-      .skip(parseInt(req.params.page) * 10)
       .sort({ createdAt: 'desc' })
+      .skip(parseInt(req.query.page) * 3)
     res.status(200).json(posts)
   } catch (err) {
     res.status(500).json(err)
