@@ -11,6 +11,17 @@ const index = async (req, res) => {
   }
 }
 
+const show = async (req, res) => {
+  try {
+    const profile = await Profile.findById(req.params.id)
+    res.status(200).json(profile)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
 export {
-  index
+  index,
+  show
 }
