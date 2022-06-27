@@ -34,6 +34,11 @@ const postSchema = new Schema({
     type: Boolean,
     default: false
   },
+  tag: {
+    type: String,
+		default: 'Javascript',
+		enum: ['HTML', 'CSS', 'Javascript', 'Python']
+  },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
   comments: [commentSchema]
 }, { timestamps: true })
