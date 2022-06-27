@@ -6,6 +6,7 @@ import cors from 'cors'
 // import routers
 import { router as authRouter } from './routes/auth.js'
 import { router as postsRouter } from './routes/posts.js'
+import { router as commentsRouter } from './routes/comments.js'
 import { router as profilesRouter } from './routes/profiles.js'
 
 import('./config/database.js')
@@ -22,9 +23,10 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use('/api/profiles', profilesRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/posts', postsRouter)
+app.use('/api/profiles', profilesRouter)
+app.use('/api/comments', commentsRouter)
 
 app.use(function (req, res, next) {
   res.status(404).json({ err: "Not found" })
