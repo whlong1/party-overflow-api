@@ -1,12 +1,23 @@
 import mongoose from 'mongoose'
 
+const voteSchema = new mongoose.Schema({
+  vote: {
+    type: Boolean,
+    default: true
+  },
+  commentId: {
+    type: String,
+    required: true,
+  }
+})
+
 const profileSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     lowercase: true,
     unique: true
-  },
+  }, 
   name: {
     type: String,
     required: true,
@@ -20,7 +31,7 @@ const profileSchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
-  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  votes: [voteSchema],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
   bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, {

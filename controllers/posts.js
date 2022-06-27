@@ -130,6 +130,28 @@ const deleteComment = async (req, res, next) => {
   }
 }
 
+const castVote = async (req, res, next) => {
+  try {
+    const vote = parseInt(req.body.vote)
+    const { postId, commentId } = req.params
+    const post = await Post.findById(postId, 'comments')
+    const profile = await Profile.findById(postId, 'votes')
+    const comment = post.comments.id(commentId)
+    if (profile.votes.includes(commentId)) {
+      return next({ message: 'Unauthorized', status: 401 })
+    } else {
+      comment.rating += vote
+      profile.votes.push({ vote: vote, commentId: commentId })
+      await post.save()
+      await profile.save()
+      res.status(200).json(comment)
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
 export {
   index,
   create,
@@ -138,7 +160,8 @@ export {
   deletePost as delete,
   createComment,
   updateComment,
-  deleteComment
+  deleteComment,
+  castVote
 }
 
 
