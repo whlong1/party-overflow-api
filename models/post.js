@@ -36,6 +36,7 @@ const postSchema = new Schema({
   },
   tag: {
     type: String,
+    required: true,
 		default: 'Javascript',
 		enum: ['HTML', 'CSS', 'Javascript', 'Python']
   },
