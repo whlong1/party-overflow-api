@@ -20,7 +20,8 @@ const profileSchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, {
   timestamps: true,
 })
