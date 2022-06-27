@@ -33,7 +33,7 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const limit = 3
+    const limit = 8
     const page = req.query.page ? req.query.page : 0
     const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
       .populate('author', 'name avatar')
@@ -82,7 +82,7 @@ const createComment = async (req, res) => {
     post.comments.push(req.body)
     await post.save()
     const newComment = post.comments[post.comments.length - 1]
-    const profile = await Profile.findById(req.user.profile)
+    const profile = await Profile.findById(req.user.profile, 'name avatar')
     newComment.author = profile
     res.status(201).json(newComment)
   } catch (err) {
@@ -93,7 +93,7 @@ const createComment = async (req, res) => {
 const updateComment = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId)
-      .populate('added_by').populate('comments.commenter')
+      .populate('author').populate('comments.author')
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
       return next({ message: 'Unauthorized', status: 401 })
@@ -102,8 +102,8 @@ const updateComment = async (req, res, next) => {
         { _id: req.user.profile },
         { $inc: { solution_count: 1 } }
       )
-      post.is_resolved = true
-      comment.is_solution = true
+      post.resolved = true
+      comment.solution = true
 
       await post.save()
       res.status(200).json(post)
