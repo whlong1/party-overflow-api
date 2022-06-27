@@ -135,7 +135,7 @@ const castVote = async (req, res, next) => {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
     const post = await Post.findById(postId, 'comments')
-    const profile = await Profile.findById(postId, 'votes')
+    const profile = await Profile.findById(req.user.profile, 'votes')
     const comment = post.comments.id(commentId)
     if (profile.votes.includes(commentId)) {
       return next({ message: 'Unauthorized', status: 401 })
