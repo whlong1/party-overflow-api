@@ -16,6 +16,10 @@ const commentSchema = new Schema(
       type: Boolean,
       default: false
     },
+    rating: {
+      type: Number,
+      default: 0
+    },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }
   },
   { timestamps: true }
@@ -37,8 +41,8 @@ const postSchema = new Schema({
   tag: {
     type: String,
     required: true,
-		default: 'Javascript',
-		enum: ['HTML', 'CSS', 'Javascript', 'Python']
+    default: 'Javascript',
+    enum: ['HTML', 'CSS', 'Javascript', 'Python']
   },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
   comments: [commentSchema]
