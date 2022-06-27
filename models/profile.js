@@ -20,6 +20,7 @@ const profileSchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
+  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
   bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, {
