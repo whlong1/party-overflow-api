@@ -13,7 +13,6 @@ import { router as profilesRouter } from './routes/profiles.js'
 
 import('./config/database.js')
 
-
 const app = express()
 
 app.use(cors())
