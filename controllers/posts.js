@@ -65,11 +65,10 @@ const deletePost = async (req, res, next) => {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ message: 'Unauthorized'})
-      // return next({ message: 'Unauthorized', status: 401 })
     } else {
-      await post.delete()
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
+      await post.delete()
       await profile.save()
       res.status(200).send('OK')
     }
@@ -100,14 +99,16 @@ const updateComment = async (req, res, next) => {
     if (!comment.author.equals(req.user.profile)) {
       return next({ message: 'Unauthorized', status: 401 })
     } else {
-      await Profile.updateOne(
-        { _id: req.user.profile },
-        { $inc: { solution_count: 1 } }
-      )
+
       post.resolved = true
       comment.solution = true
 
       await post.save()
+      await Profile.updateOne(
+        { _id: req.user.profile },
+        { $inc: { solution_count: 1 } }
+      )
+      
       res.status(200).json(post)
     }
   } catch (err) {

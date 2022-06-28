@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import * as postCtrl from '../controllers/posts.js'
-import { decodeUserFromToken, checkAuth, attributeAuthor } from '../middleware/auth.js'
+import { attributeAuthor } from '../middleware/middleware.js'
+import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 
 const router = Router()
 

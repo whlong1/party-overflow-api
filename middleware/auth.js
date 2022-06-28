@@ -22,13 +22,7 @@ function checkAuth(req, res, next) {
   return req.user ? next() : res.status(401).json({ msg: 'Not Authorized' })
 }
 
-function attributeAuthor(req, res, next) {
-  req.body.author = req.user.profile
-  next()
-}
-
 export {
   decodeUserFromToken,
-  checkAuth,
-  attributeAuthor
+  checkAuth
 }

@@ -3,24 +3,23 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 
-// import routers
+// Custom Middleware
+import { removeEmptyFields } from './middleware/middleware.js'
+
+// Import Routers
 import { router as authRouter } from './routes/auth.js'
 import { router as postsRouter } from './routes/posts.js'
 import { router as profilesRouter } from './routes/profiles.js'
 
 import('./config/database.js')
 
-// set up app
+
 const app = express()
 
 app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
-
-app.use(function (req, res, next) {
-  for (let key in req.body) req.body[key] === '' && delete req.body[key]
-  next()
-})
+app.use(removeEmptyFields)
 
 app.use('/api/auth', authRouter)
 app.use('/api/posts', postsRouter)
