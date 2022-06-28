@@ -33,7 +33,7 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const limit = 8
+    const limit = 15
     const page = req.query.page ? req.query.page : 0
     const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
       .populate('author', 'name avatar')
@@ -64,14 +64,15 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      return next({ message: 'Unauthorized', status: 401 })
+      res.status(401).json({ message: 'Unauthorized'})
+      // return next({ message: 'Unauthorized', status: 401 })
     } else {
       await post.delete()
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
       await profile.save()
+      res.status(200).send('OK')
     }
-    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
@@ -135,11 +136,9 @@ const castVote = async (req, res, next) => {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
     const profile = await Profile.findById(req.user.profile, 'votes')
-
     if (profile.votes.filter((v) => v.commentId === commentId).length) {
       return next({ message: 'Unauthorized', status: 401 })
     }
-    
     const post = await Post.findById(postId, 'comments')
     const comment = post.comments.id(commentId)
     comment.rating += vote

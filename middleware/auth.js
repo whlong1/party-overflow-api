@@ -23,7 +23,7 @@ function checkAuth(req, res, next) {
 }
 
 function attributeAuthor(req, res, next) {
-  if (req.method === 'POST') req.body.author = req.user.profile
+  req.body.author = req.user.profile
   next()
 }
 
