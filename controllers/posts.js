@@ -134,18 +134,19 @@ const castVote = async (req, res, next) => {
   try {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
-    const post = await Post.findById(postId, 'comments')
     const profile = await Profile.findById(req.user.profile, 'votes')
-    const comment = post.comments.id(commentId)
-    if (profile.votes.includes(commentId)) {
+
+    if (profile.votes.filter((v) => v.commentId === commentId).length) {
       return next({ message: 'Unauthorized', status: 401 })
-    } else {
-      comment.rating += vote
-      profile.votes.push({ vote: vote, commentId: commentId })
-      await post.save()
-      await profile.save()
-      res.status(200).json(comment)
     }
+    
+    const post = await Post.findById(postId, 'comments')
+    const comment = post.comments.id(commentId)
+    comment.rating += vote
+    profile.votes.push({ vote: vote, commentId: commentId })
+    await post.save()
+    await profile.save()
+    res.status(200).json(comment)
   } catch (err) {
     res.status(500).json(err)
   }
