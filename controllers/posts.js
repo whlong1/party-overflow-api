@@ -38,7 +38,6 @@ const show = async (req, res) => {
     const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
       .populate('author', 'name avatar')
       .populate('comments.author', 'name avatar')
-
     res.status(200).json(post)
   } catch (err) {
     res.status(500).json(err)
@@ -49,7 +48,7 @@ const update = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      return next({ message: 'Unauthorized', status: 401 })
+      res.status(401).json({ message: 'Unauthorized' })
     } else {
       post.resolved = true
       await post.save()
@@ -64,7 +63,7 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ message: 'Unauthorized'})
+      res.status(401).json({ message: 'Unauthorized' })
     } else {
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
@@ -97,7 +96,7 @@ const updateComment = async (req, res, next) => {
       .populate('author').populate('comments.author')
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      return next({ message: 'Unauthorized', status: 401 })
+      res.status(401).json({ message: 'Unauthorized' })
     } else {
 
       post.resolved = true
@@ -108,7 +107,7 @@ const updateComment = async (req, res, next) => {
         { _id: req.user.profile },
         { $inc: { solution_count: 1 } }
       )
-      
+
       res.status(200).json(post)
     }
   } catch (err) {
@@ -121,7 +120,7 @@ const deleteComment = async (req, res, next) => {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      return next({ message: 'Unauthorized', status: 401 })
+      res.status(401).json({ message: 'Unauthorized' })
     } else {
       post.comments.remove({ _id: req.params.commentId })
       await post.save()
@@ -138,7 +137,7 @@ const castVote = async (req, res, next) => {
     const { postId, commentId } = req.params
     const profile = await Profile.findById(req.user.profile, 'votes')
     if (profile.votes.filter((v) => v.commentId === commentId).length) {
-      return next({ message: 'Unauthorized', status: 401 })
+      res.status(401).json({ message: 'Unauthorized' })
     }
     const post = await Post.findById(postId, 'comments')
     const comment = post.comments.id(commentId)
@@ -152,7 +151,6 @@ const castVote = async (req, res, next) => {
   }
 }
 
-
 export {
   index,
   create,
@@ -164,8 +162,3 @@ export {
   deleteComment,
   castVote
 }
-
-
-
-
-

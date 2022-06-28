@@ -3,7 +3,7 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 
-// Custom Middleware
+// Import Custom Middleware
 import { removeEmptyFields } from './middleware/middleware.js'
 
 // Import Routers
@@ -15,6 +15,7 @@ import('./config/database.js')
 
 const app = express()
 
+// Middleware
 app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
