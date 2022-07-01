@@ -21,7 +21,26 @@ const show = async (req, res) => {
 }
 
 
+const follow = async (req, res) => {
+  try {
+    res.status(200)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const unfollow = async (req, res) => {
+  try {
+    res.status(200)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
 export {
   index,
-  show
+  show,
+  follow,
+  unfollow
 }
