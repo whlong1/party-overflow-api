@@ -20,10 +20,16 @@ const show = async (req, res) => {
   }
 }
 
-
 const follow = async (req, res) => {
   try {
-    res.status(200)
+    const follower = Profile.findById(req.user.profile)
+    const followee = Profile.findById(req.params.id)
+
+    follower.following.push(followee._id)
+    followee.followers.push(follower._id)
+
+    await Promise.all([follower.save(), followee.save()])
+    res.status(200).json({ msg: 'Success' })
   } catch (err) {
     res.status(500).json(err)
   }
