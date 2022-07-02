@@ -27,16 +27,20 @@ const follow = async (req, res) => {
     follower.following.push(followee._id)
     followee.followers.push(follower._id)
     await Promise.all([follower.save(), followee.save()])
-    res.status(200).json({ msg: `Following ${followee.name}.`})
+    res.status(200).json({ msg: `You are now following ${followee.name}.`})
   } catch (err) {
-    console.log(err)
     res.status(500).json(err)
   }
 }
 
 const unfollow = async (req, res) => {
   try {
-    res.status(200)
+    const follower = await Profile.findById(req.user.profile)
+    const followee = await Profile.findById(req.params.id)
+    follower.following.remove(followee._id)
+    followee.followers.remove(follower._id)
+    await Promise.all([follower.save(), followee.save()])
+    res.status(200).json({ msg: `You are no longer following ${followee.name}.`})
   } catch (err) {
     res.status(500).json(err)
   }
