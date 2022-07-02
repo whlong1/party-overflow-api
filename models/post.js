@@ -38,7 +38,7 @@ const postSchema = new Schema({
     type: Boolean,
     default: false
   },
-  tag: {
+  language: {
     type: String,
     required: true,
     default: 'Javascript',
