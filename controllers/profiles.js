@@ -2,7 +2,7 @@ import { Profile } from "../models/profile.js";
 
 const index = async (req, res) => {
   try {
-    const profiles = await Profile.find({}, 'name avatar solution_count')
+    const profiles = await Profile.find({}, 'name avatar solution_count followers following')
       .sort({ solution_count: -1 })
       .limit(10)
     res.status(200).json(profiles)
@@ -22,13 +22,14 @@ const show = async (req, res) => {
 
 const follow = async (req, res) => {
   try {
-    const follower = Profile.findById(req.user.profile)
-    const followee = Profile.findById(req.params.id)
+    const follower = await Profile.findById(req.user.profile)
+    const followee = await Profile.findById(req.params.id)
     follower.following.push(followee._id)
     followee.followers.push(follower._id)
     await Promise.all([follower.save(), followee.save()])
-    res.status(200).json({ msg: 'Success' })
+    res.status(200).json({ msg: `Following ${followee.name}.`})
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
