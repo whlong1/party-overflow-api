@@ -48,7 +48,7 @@ const update = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ msg: 'Unauthorized' })
     } else {
       post.resolved = true
       await post.save()
@@ -63,12 +63,11 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ msg: 'Unauthorized' })
     } else {
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
-      await post.delete()
-      await profile.save()
+      await Promise.all([await post.delete(), await profile.save()])
       res.status(200).send('OK')
     }
   } catch (err) {
@@ -96,18 +95,17 @@ const updateComment = async (req, res, next) => {
       .populate('author').populate('comments.author')
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ msg: 'Unauthorized' })
     } else {
-
       post.resolved = true
       comment.solution = true
-
-      await post.save()
-      await Profile.updateOne(
-        { _id: req.user.profile },
-        { $inc: { solution_count: 1 } }
-      )
-
+      await Promise.all([
+        await post.save(),
+        await Profile.updateOne(
+          { _id: req.user.profile },
+          { $inc: { solution_count: 1 } }
+        )
+      ])
       res.status(200).json(post)
     }
   } catch (err) {
@@ -120,7 +118,7 @@ const deleteComment = async (req, res, next) => {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
     if (!comment.author.equals(req.user.profile)) {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ msg: 'Unauthorized' })
     } else {
       post.comments.remove({ _id: req.params.commentId })
       await post.save()
@@ -137,15 +135,15 @@ const castVote = async (req, res, next) => {
     const { postId, commentId } = req.params
     const profile = await Profile.findById(req.user.profile, 'votes')
     if (profile.votes.filter((v) => v.commentId === commentId).length) {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ msg: 'Unauthorized' })
+    } else {
+      const post = await Post.findById(postId, 'comments')
+      const comment = post.comments.id(commentId)
+      comment.rating += vote
+      profile.votes.push({ vote: vote, commentId: commentId })
+      await Promise.all([post.save(), profile.save()])
+      res.status(200).json(comment)
     }
-    const post = await Post.findById(postId, 'comments')
-    const comment = post.comments.id(commentId)
-    comment.rating += vote
-    profile.votes.push({ vote: vote, commentId: commentId })
-    await post.save()
-    await profile.save()
-    res.status(200).json(comment)
   } catch (err) {
     res.status(500).json(err)
   }
