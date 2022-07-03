@@ -44,6 +44,11 @@ const postSchema = new Schema({
     default: 'Javascript',
     enum: ['HTML', 'CSS', 'Javascript', 'Python']
   },
+  views: {
+    type: Number,
+    default: 0
+  },
+  viewers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
   comments: [commentSchema]
 }, { timestamps: true })
