@@ -151,6 +151,15 @@ const castVote = async (req, res, next) => {
   }
 }
 
+
+const incrementViews = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 export {
   index,
   create,
@@ -160,5 +169,6 @@ export {
   createComment,
   updateComment,
   deleteComment,
-  castVote
+  castVote,
+  incrementViews
 }
