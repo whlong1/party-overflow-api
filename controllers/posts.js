@@ -151,10 +151,17 @@ const castVote = async (req, res, next) => {
   }
 }
 
-
 const incrementViews = async (req, res) => {
   try {
-
+    const post = await Post.findById(req.params.id, 'views viewers author')
+    if (post.viewers.includes(req.user.profile) || post.author.equals(req.user.profile)) {
+      res.status(200).send('OK')
+    } else {
+      post.views = post.views + 1
+      post.viewers.push(req.user.profile)
+      await post.save()
+      res.status(200).send('OK')
+    }
   } catch (err) {
     res.status(500).json(err)
   }

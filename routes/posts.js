@@ -23,7 +23,7 @@ router.delete('/:postId/comments/:commentId', checkAuth, postCtrl.deleteComment)
 router.post('/:postId/comments/:commentId', checkAuth, postCtrl.castVote)
 
 
-router.patch('/:postId/views', checkAuth, postCtrl.incrementViews)
+router.patch('/:id/views', checkAuth, postCtrl.incrementViews)
 
 
 export {
