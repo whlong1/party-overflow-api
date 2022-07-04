@@ -55,7 +55,6 @@ const postSchema = new Schema({
 
 
 postSchema.statics.findByIdAndSortComments = (id) => {
-  console.log(id)
   return mongoose.model('Post').aggregate([
     {
       $match: { _id: mongoose.Types.ObjectId(id) }
@@ -68,7 +67,6 @@ postSchema.statics.findByIdAndSortComments = (id) => {
         as: 'author'
       },
     },
-
     {
       $project: {
         _id: 1,
@@ -78,13 +76,12 @@ postSchema.statics.findByIdAndSortComments = (id) => {
         language: 1,
         views: 1,
         author: 1,
-        comments: 1,
+        comments: 1
       }
     },
-
     { $sort: { "comments.rating": 1 } },
   ])
-};
+}
 
 const Post = mongoose.model('Post', postSchema)
 
