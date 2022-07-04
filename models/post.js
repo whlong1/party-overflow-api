@@ -66,7 +66,6 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
         as: 'author'
       },
     },
-
     {
       $project: {
         _id: 1,
@@ -75,12 +74,10 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
         resolved: 1,
         language: 1,
         views: 1,
-        author: 1,
-        comments: {$slice: ["$comments", page, limit]}
+        author: { _id: 1, name: 1, avatar: 1 },
+        comments: { $slice: ["$comments", page, limit] }
       }
     },
-
-
     { $sort: { "comments.rating": 1 } },
   ])
 }
