@@ -1,6 +1,5 @@
 import { Profile } from "../models/profile.js"
 import { Post } from "../models/post.js"
-import { compareSync } from "bcrypt"
 
 const create = async (req, res) => {
   try {
@@ -170,14 +169,15 @@ const incrementViews = async (req, res) => {
 const bookmarkPost = async (req, res) => {
   try {
     const profile = await Profile.findById(req.user.profile)
-    if (profile.bookmars.includes(req.params.id)) {
+    if (profile.bookmarks.includes(req.params.id)) {
       res.status(401).json({ msg: 'Already bookmarked!' })
     } else {
       profile.bookmarks.push(req.params.id)
       profile.save()
-      res.status(200).json(post)
+      res.status(200).send('OK')
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
