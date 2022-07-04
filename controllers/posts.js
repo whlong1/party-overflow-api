@@ -169,9 +169,16 @@ const incrementViews = async (req, res) => {
 
 const bookmarkPost = async (req, res) => {
   try {
-
+    const profile = await Profile.findById(req.user.profile)
+    if (profile.bookmars.includes(req.params.id)) {
+      res.status(401).json({ msg: 'Already bookmarked!' })
+    } else {
+      profile.bookmarks.push(req.params.id)
+      profile.save()
+      res.status(200).json(post)
+    }
   } catch (err) {
-
+    res.status(500).json(err)
   }
 }
 
