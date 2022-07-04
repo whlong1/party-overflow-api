@@ -53,6 +53,39 @@ const postSchema = new Schema({
   comments: [commentSchema]
 }, { timestamps: true })
 
+
+postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
+  return mongoose.model('Post').aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'profiles',
+        localField: 'author',
+        foreignField: '_id',
+        as: 'author'
+      },
+    },
+    { $unwind: '$author' },
+    {
+      $project: {
+        _id: 1,
+        text: 1,
+        codeblock: 1,
+        resolved: 1,
+        language: 1,
+        views: 1,
+        author: { _id: 1, name: 1, avatar: 1 },
+        comments: { $slice: ["$comments", page, limit] }
+      }
+    },
+    { $sort: { "comments.rating": 1 } },
+    //============
+    // { $unwind: '$comments.author' },
+    // { $lookup: { from: "profiles", localField: "comments.author", foreignField: "_id", as: "comments.author" } },
+    //============
+  ])
+}
+
 const Post = mongoose.model('Post', postSchema)
 
 export {
