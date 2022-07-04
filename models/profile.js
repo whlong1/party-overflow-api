@@ -17,7 +17,7 @@ const profileSchema = new mongoose.Schema({
     required: true,
     lowercase: true,
     unique: true
-  }, 
+  },
   name: {
     type: String,
     required: true,

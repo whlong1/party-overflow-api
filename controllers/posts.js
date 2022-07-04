@@ -167,6 +167,14 @@ const incrementViews = async (req, res) => {
   }
 }
 
+const bookmarkPost = async (req, res) => {
+  try {
+
+  } catch (err) {
+
+  }
+}
+
 export {
   index,
   create,
@@ -177,5 +185,6 @@ export {
   updateComment,
   deleteComment,
   castVote,
-  incrementViews
+  incrementViews,
+  bookmarkPost
 }

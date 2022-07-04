@@ -19,11 +19,10 @@ router.delete('/:id', checkAuth, postCtrl.delete)
 router.post('/:id/comments', checkAuth, attributeAuthor, postCtrl.createComment)
 router.put('/:postId/comments/:commentId', checkAuth, postCtrl.updateComment)
 router.delete('/:postId/comments/:commentId', checkAuth, postCtrl.deleteComment)
-
 router.post('/:postId/comments/:commentId', checkAuth, postCtrl.castVote)
 
-
 router.patch('/:id/views', checkAuth, postCtrl.incrementViews)
+router.post('/:id/bookmarks', checkAuth, postCtrl.bookmarkPost)
 
 
 export {
