@@ -35,9 +35,16 @@ const show = async (req, res) => {
   try {
     const limit = 10
     const page = req.query.page ? req.query.page : 0
-    const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
-      .populate('author', 'name avatar')
-      .populate('comments.author', 'name avatar')
+    // const post = await Post.findById(req.params.id, { comments: { $slice: [page, limit] } })
+
+    const post = await Post.findByIdAndSortComments(req.params.id)
+      // .populate('author', 'name avatar')
+      // .populate('comments.author', 'name avatar')
+
+    console.log(post)
+
+
+
     res.status(200).json(post)
   } catch (err) {
     console.log(err)
