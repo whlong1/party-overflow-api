@@ -54,11 +54,10 @@ const postSchema = new Schema({
 }, { timestamps: true })
 
 
-postSchema.statics.findByIdAndSortComments = (id) => {
+postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
   return mongoose.model('Post').aggregate([
-    {
-      $match: { _id: mongoose.Types.ObjectId(id) }
-    },
+    { $match: { _id: mongoose.Types.ObjectId(id) } },
+
     {
       $lookup: {
         from: 'profiles',
@@ -67,6 +66,7 @@ postSchema.statics.findByIdAndSortComments = (id) => {
         as: 'author'
       },
     },
+
     {
       $project: {
         _id: 1,
@@ -76,9 +76,11 @@ postSchema.statics.findByIdAndSortComments = (id) => {
         language: 1,
         views: 1,
         author: 1,
-        comments: 1
+        comments: {$slice: ["$comments", page, limit]}
       }
     },
+
+
     { $sort: { "comments.rating": 1 } },
   ])
 }

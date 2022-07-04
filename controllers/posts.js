@@ -33,7 +33,9 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const post = await Post.findByIdAndSortComments(req.params.id)
+    const limit = 10
+    const page = req.query.page ? req.query.page : 0
+    const post = await Post.findByIdAndSortComments(req.params.id, page, limit)
     res.status(200).json(post)
   } catch (err) {
     console.log(err)
@@ -41,7 +43,7 @@ const show = async (req, res) => {
   }
 }
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
@@ -56,7 +58,7 @@ const update = async (req, res, next) => {
   }
 }
 
-const deletePost = async (req, res, next) => {
+const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     if (!post.author.equals(req.user.profile)) {
@@ -86,7 +88,7 @@ const createComment = async (req, res) => {
   }
 }
 
-const updateComment = async (req, res, next) => {
+const updateComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId)
       .populate('author').populate('comments.author')
@@ -110,7 +112,7 @@ const updateComment = async (req, res, next) => {
   }
 }
 
-const deleteComment = async (req, res, next) => {
+const deleteComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId)
     const comment = post.comments.id(req.params.commentId)
@@ -126,7 +128,7 @@ const deleteComment = async (req, res, next) => {
   }
 }
 
-const castVote = async (req, res, next) => {
+const castVote = async (req, res) => {
   try {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
