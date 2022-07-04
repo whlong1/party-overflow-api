@@ -57,7 +57,6 @@ const postSchema = new Schema({
 postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
   return mongoose.model('Post').aggregate([
     { $match: { _id: mongoose.Types.ObjectId(id) } },
-
     {
       $lookup: {
         from: 'profiles',
@@ -66,26 +65,7 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
         as: 'author'
       },
     },
-
     { $unwind: '$author' },
-
-    // { $unwind: "$comments" },
-    // {
-    //   $lookup: {
-    //     from: 'profiles',
-    //     localField: 'comments.author',
-    //     foreignField: '_id',
-    //     as: 'comments.author'
-    //   },
-    // },
-    // { $unwind: "$comments.author" },
-    // {
-    //   $group: {
-    //     "_id": "$_id",
-    //     "comments": { "$push": "$comments" }
-    //   }
-    // },
-
     {
       $project: {
         _id: 1,
@@ -95,10 +75,14 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
         language: 1,
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
-        // comments: { $slice: ["$comments", page, limit] }
+        comments: { $slice: ["$comments", page, limit] }
       }
     },
     { $sort: { "comments.rating": 1 } },
+    //============
+    // { $unwind: '$comments.author' },
+    // { $lookup: { from: "profiles", localField: "comments.author", foreignField: "_id", as: "comments.author" } },
+    //============
   ])
 }
 
