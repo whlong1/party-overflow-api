@@ -95,7 +95,7 @@ const updateComment = async (req, res, next) => {
     const post = await Post.findById(req.params.postId)
       .populate('author').populate('comments.author')
     const comment = post.comments.id(req.params.commentId)
-    if (!comment.author.equals(req.user.profile)) {
+    if (!post.author.equals(req.user.profile)) {
       res.status(401).json({ msg: 'Unauthorized' })
     } else {
       post.resolved = true
@@ -162,6 +162,7 @@ const incrementViews = async (req, res) => {
       res.status(200).send('OK')
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
