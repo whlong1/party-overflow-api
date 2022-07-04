@@ -36,6 +36,7 @@ const show = async (req, res) => {
     const limit = 10
     const page = req.query.page ? req.query.page : 0
     const post = await Post.findByIdAndSortComments(req.params.id, page, limit)
+    
     res.status(200).json(post)
   } catch (err) {
     console.log(err)
