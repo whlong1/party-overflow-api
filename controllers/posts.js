@@ -179,6 +179,16 @@ const bookmarkPost = async (req, res) => {
   }
 }
 
+const removeBookmark = async (req, res) => {
+  try {
+    console.log(req.params.id)
+    console.log(req.params.postId)
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 export {
   index,
   create,
@@ -190,5 +200,6 @@ export {
   deleteComment,
   castVote,
   incrementViews,
-  bookmarkPost
+  bookmarkPost,
+  removeBookmark
 }

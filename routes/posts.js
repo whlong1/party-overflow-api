@@ -23,6 +23,7 @@ router.post('/:postId/comments/:commentId', checkAuth, postCtrl.castVote)
 
 router.patch('/:id/views', checkAuth, postCtrl.incrementViews)
 router.post('/:id/bookmarks', checkAuth, postCtrl.bookmarkPost)
+router.delete('/:id/bookmarks/:postId', checkAuth, postCtrl.removeBookmark)
 
 
 export {
