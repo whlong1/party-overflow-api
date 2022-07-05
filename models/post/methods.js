@@ -10,6 +10,7 @@ function findByIdAndSortComments(id, page, limit) {
     { $unwind: '$author' },
     // Find profiles associated with each comment:
     { $lookup: { from: "profiles", localField: "comments.author", foreignField: "_id", as: "authors" } },
+
     // Add _id, name, and avatar to author property of comment:
     {
       $addFields: {
@@ -24,7 +25,17 @@ function findByIdAndSortComments(id, page, limit) {
         }
       }
     },
-    // Clean up returned fields and find existing solution:
+    // Find existing solution:
+    { $addFields: { solution: { $filter: { input: "$comments", as: "comment", cond: { $eq: ["$$comment.solution", true] } } } } },
+    // Remove existing solution from comments array:
+    { $addFields: { comments: { $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } } } } },
+
+
+    // Sort comments by rating:
+    { $sort: { "comments.rating": 1 } },
+
+
+    // Clean up returned fields:
     {
       $project: {
         _id: 1,
@@ -35,16 +46,9 @@ function findByIdAndSortComments(id, page, limit) {
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
         comments: { $slice: ["$comments", page, limit] },
-        solution: {
-          $filter: {
-            input: "$comments", as: "comment",
-            cond: { $eq: ["$$comment.solution", true] }
-          }
-        }
+        solution: { $first: "$solution" },
       }
     },
-    // Sort comments by rating:
-    { $sort: { "comments.rating": 1 } },
   ])
 }
 
