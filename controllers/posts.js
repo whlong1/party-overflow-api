@@ -175,7 +175,6 @@ const bookmarkPost = async (req, res) => {
       res.status(200).send('OK')
     }
   } catch (err) {
-    console.log(err)
     res.status(500).json(err)
   }
 }

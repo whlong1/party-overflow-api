@@ -2,7 +2,7 @@ import { Profile } from "../models/profile.js";
 
 const index = async (req, res) => {
   try {
-    const profiles = await Profile.find({}, 'name avatar solution_count followers following')
+    const profiles = await Profile.find({}, 'name avatar solution_count')
       .sort({ solution_count: -1 })
       .limit(10)
     res.status(200).json(profiles)
@@ -13,7 +13,18 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const profile = await Profile.findById(req.params.id)
+    const fields = '_id email name avatar solution count bookmarks following followers'
+    const profile = await Profile.findById(req.params.id, fields)
+      .populate({
+        limit: 8,
+        path: 'posts',
+        options: { sort: { 'views': -1 } }, 
+        select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
+      })
+      .populate({
+        path: 'bookmarks',
+        select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
+      })
     res.status(200).json(profile)
   } catch (err) {
     res.status(500).json(err)
