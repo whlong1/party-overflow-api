@@ -34,7 +34,7 @@ function findByIdAndSortComments(id, page, limit) {
         language: 1,
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
-        comments: { $slice: ["$comments", page, limit] }
+        comments: { $slice: ["$comments", page, limit] },
       }
     },
     // Sort comments by rating:

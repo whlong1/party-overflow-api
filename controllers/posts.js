@@ -35,9 +35,10 @@ const show = async (req, res) => {
   try {
     const limit = 8
     const page = req.query.page ? parseInt(req.query.page) * limit : 0
-    const post = await Post.findByIdAndSortComments(req.params.id, page, limit)
+    const [post] = await Post.findByIdAndSortComments(req.params.id, page, limit)
     res.status(200).json(post)
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
