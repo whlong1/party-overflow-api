@@ -66,6 +66,32 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
       },
     },
     { $unwind: '$author' },
+    { $lookup: { from: "profiles", localField: "comments.author", foreignField: "_id", as: "authors" } },
+    {
+      $addFields: {
+        "comments.author._id": {
+          $cond: [
+            { $ne: ["$author", []] },
+            { $arrayElemAt: ["$authors._id", 0] },
+            "$comments.author",
+          ],
+        },
+        "comments.author.name": {
+          $cond: [
+            { $ne: ["$author", []] },
+            { $arrayElemAt: ["$authors.name", 0] },
+            "$comments.author",
+          ],
+        },
+        "comments.author.avatar": {
+          $cond: [
+            { $ne: ["$author", []] },
+            { $arrayElemAt: ["$authors.avatar", 0] },
+            "$comments.author",
+          ],
+        }
+      }
+    },
     {
       $project: {
         _id: 1,
@@ -75,14 +101,10 @@ postSchema.statics.findByIdAndSortComments = (id, page, limit) => {
         language: 1,
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
-        comments: { $slice: ["$comments", page, limit] }
+        comments: { $slice: ["$comments", page, limit], },
       }
     },
     { $sort: { "comments.rating": 1 } },
-    //============
-    // { $unwind: '$comments.author' },
-    // { $lookup: { from: "profiles", localField: "comments.author", foreignField: "_id", as: "comments.author" } },
-    //============
   ])
 }
 
