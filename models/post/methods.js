@@ -24,7 +24,7 @@ function findByIdAndSortComments(id, page, limit) {
         }
       }
     },
-    // Clean up returned fields:
+    // Clean up returned fields and find existing solution:
     {
       $project: {
         _id: 1,
@@ -35,6 +35,12 @@ function findByIdAndSortComments(id, page, limit) {
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
         comments: { $slice: ["$comments", page, limit] },
+        solution: {
+          $filter: {
+            input: "$comments", as: "comment",
+            cond: { $eq: ["$$comment.solution", true] }
+          }
+        }
       }
     },
     // Sort comments by rating:
