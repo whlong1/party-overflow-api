@@ -25,17 +25,31 @@ function findByIdAndSortComments(id, page, limit) {
         }
       }
     },
+
     // Find existing solution:
     { $addFields: { solution: { $filter: { input: "$comments", as: "comment", cond: { $eq: ["$$comment.solution", true] } } } } },
     // Remove existing solution from comments array:
     { $addFields: { comments: { $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } } } } },
 
-
     // Sort comments by rating:
-    { $sort: { "comments.rating": 1 } },
+    { $unwind: "$comments" }, { $sort: { "comments.rating": -1 } },
 
+    // Group new object:
+    {
+      $group: {
+        _id: "$_id",
+        text: { $first: "$text" },
+        codeblock: { $first: "$codeblock" },
+        resolved: { $first: "$resolved" },
+        language: { $first: "$language" },
+        views: { $first: "$views" },
+        author: { $first: "$author" },
+        solution: { $first: "$solution" },
+        comments: { $push: "$comments" },
+      }
+    },
 
-    // Clean up returned fields:
+    // Clean up returned fields and apply comment pagination:
     {
       $project: {
         _id: 1,
@@ -45,8 +59,8 @@ function findByIdAndSortComments(id, page, limit) {
         language: 1,
         views: 1,
         author: { _id: 1, name: 1, avatar: 1 },
-        comments: { $slice: ["$comments", page, limit] },
         solution: { $first: "$solution" },
+        comments: { $slice: ["$comments", page, limit] },
       }
     },
   ])
