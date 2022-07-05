@@ -5,14 +5,7 @@ function findByIdAndSortComments(id, page, limit) {
     // Find post by _id:
     { $match: { _id: mongoose.Types.ObjectId(id) } },
     // Fill author field with associated profile
-    {
-      $lookup: {
-        from: 'profiles',
-        localField: 'author',
-        foreignField: '_id',
-        as: 'author'
-      },
-    },
+    { $lookup: { from: 'profiles', localField: 'author', foreignField: '_id', as: 'author' } },
     // Convert author field from array to single object:
     { $unwind: '$author' },
     // Find profiles associated with each comment:
