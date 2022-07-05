@@ -28,11 +28,9 @@ function findByIdAndSortComments(id, page, limit) {
 
     // Find existing solution:
     { $addFields: { solution: { $filter: { input: "$comments", as: "comment", cond: { $eq: ["$$comment.solution", true] } } } } },
-    // Remove existing solution from comments array:
-    { $addFields: { comments: { $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } } } } },
 
     // Sort comments by rating:
-    { $unwind: "$comments" }, { $sort: { "comments.rating": -1 } },
+    { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } }, { $sort: { "comments.rating": -1 } },
 
     // Group new object:
     {
@@ -48,6 +46,9 @@ function findByIdAndSortComments(id, page, limit) {
         comments: { $push: "$comments" },
       }
     },
+
+    // Remove existing solution from comments array:
+    { $addFields: { comments: { $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } } } } },
 
     // Clean up returned fields and apply comment pagination:
     {
