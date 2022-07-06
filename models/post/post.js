@@ -55,6 +55,13 @@ const postSchema = new Schema({
 }, { timestamps: true })
 
 postSchema.statics = postSchemaMethods
+
+postSchema.pre('remove', function () {
+  console.log('Pre::::', this.text)
+})
+
+
+
 const Post = mongoose.model('Post', postSchema)
 
 export {
