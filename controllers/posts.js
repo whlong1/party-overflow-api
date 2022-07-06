@@ -138,12 +138,18 @@ const castVote = async (req, res) => {
     } else {
       const post = await Post.findById(postId, 'comments')
       const comment = post.comments.id(commentId)
-      comment.rating += vote
-      profile.votes.push({ vote: vote, commentId: commentId })
-      await Promise.all([post.save(), profile.save()])
-      res.status(200).json(comment)
+      console.log(comment)
+      if (comment.author.equals(req.user.profile)) {
+        res.status(401).json({ msg: 'You cannot vote for your own comment.' })
+      } else {
+        comment.rating += vote
+        profile.votes.push({ vote: vote, commentId: commentId })
+        await Promise.all([post.save(), profile.save()])
+        res.status(200).json(comment)
+      }
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
