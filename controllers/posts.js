@@ -17,8 +17,8 @@ const create = async (req, res) => {
 const index = async (req, res) => {
   try {
     const { search, page, limit, sort } = req.query
-    const fields = 'text codeblock solution author'
     const filter = { text: { $regex: search, $options: 'i' } }
+    const fields = 'text codeblock solution author resolved views'
     const order = { recent: { createdAt: 'desc' }, popular: { comments: 'desc' } }
     const posts = await Post.find(search ? filter : {}, fields)
       .limit(limit)
