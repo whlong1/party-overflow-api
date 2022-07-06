@@ -182,8 +182,10 @@ const bookmarkPost = async (req, res) => {
 
 const removeBookmark = async (req, res) => {
   try {
-    console.log(req.params.id)
-
+    const profile = await Profile.findById(req.user.profile)
+    profile.bookmarks.remove({ _id: req.params.id })
+    await profile.save()
+    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
