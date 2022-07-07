@@ -67,7 +67,6 @@ const deletePost = async (req, res) => {
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
       await Promise.all([await post.delete(), await profile.save()])
-      console.log('HIT')
       res.status(200).send('OK')
     }
   } catch (err) {

@@ -56,11 +56,9 @@ const postSchema = new Schema({
 
 postSchema.statics = postSchemaMethods
 
-postSchema.pre('remove', function () {
+postSchema.pre('remove', async function (next) {
   console.log('Pre::::', this.text)
 })
-
-
 
 const Post = mongoose.model('Post', postSchema)
 
