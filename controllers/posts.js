@@ -69,7 +69,7 @@ const deletePost = async (req, res) => {
       await Promise.all([
         await post.delete(),
         await profile.save(),
-        await Profile.updateMany({}, { $pull: { bookmarks: req.params.id} })
+        await Profile.updateMany({}, { $pull: { bookmarks: req.params.id } })
       ])
       res.status(200).send('OK')
     }
@@ -125,10 +125,16 @@ const deleteComment = async (req, res) => {
       res.status(401).json({ msg: 'Unauthorized' })
     } else {
       post.comments.remove({ _id: req.params.commentId })
-      await post.save()
+      await Promise.all([
+        await post.save(),
+        await Profile.updateMany({},
+          { $pull: { votes: { commentId: req.params.commentId } } }
+        )
+      ])
       res.status(200).send('OK')
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
@@ -143,7 +149,6 @@ const castVote = async (req, res) => {
     } else {
       const post = await Post.findById(postId, 'comments')
       const comment = post.comments.id(commentId)
-      console.log(comment)
       if (comment.author.equals(req.user.profile)) {
         res.status(401).json({ msg: 'You cannot vote for your own comment.' })
       } else {
