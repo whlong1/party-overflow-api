@@ -144,7 +144,8 @@ const castVote = async (req, res) => {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
     const profile = await Profile.findById(req.user.profile, 'votes')
-    if (profile.votes.filter((v) => v.commentId === commentId).length) {
+    if (profile.votes.some((v) => v.commentId === commentId)) {
+      // console.log(profile.votes.some((v) => v.commentId === commentId))
       res.status(401).json({ msg: 'Unauthorized' })
     } else {
       const post = await Post.findById(postId, 'comments')
