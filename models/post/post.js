@@ -50,8 +50,8 @@ const postSchema = new Schema({
     default: 0
   },
   comments: [commentSchema],
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile' },
-  viewers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }]
+  viewers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }],
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile', required: true }
 }, { timestamps: true })
 
 postSchema.statics = postSchemaMethods
