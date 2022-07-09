@@ -66,10 +66,15 @@ const deletePost = async (req, res) => {
     } else {
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
-      await Promise.all([await post.delete(), await profile.save()])
+      await Promise.all([
+        await post.delete(),
+        await profile.save(),
+        await Profile.updateMany({}, { $pull: { bookmarks: req.params.id} })
+      ])
       res.status(200).send('OK')
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
