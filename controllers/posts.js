@@ -143,18 +143,18 @@ const castVote = async (req, res) => {
   try {
     const vote = parseInt(req.body.vote)
     const { postId, commentId } = req.params
-    const lookup = { '1': true, '-1': false }
-    const msg = lookup[vote] ? 'upvote' : 'downvote'
+    const msg = vote === 1 ? 'upvote' : 'downvote'
+    console.log(':::::::::::::::::', msg)
     const profile = await Profile.findById(req.user.profile, 'votes')
     const prevVote = profile.votes.find((v) => v.commentId === commentId)
     if (prevVote) {
-      if (prevVote.vote === lookup[vote]) {
+      if (prevVote.vote === vote) {
         res.status(401).json({ msg: `You cannot ${msg} the same comment twice!` })
       } else {
         const post = await Post.findById(postId, 'comments')
         const comment = post.comments.id(commentId)
         comment.rating += vote
-        prevVote.vote = lookup[vote]
+        prevVote.vote = vote
         await Promise.all([post.save(), profile.save()])
         res.status(200).json(comment)
       }
@@ -165,7 +165,7 @@ const castVote = async (req, res) => {
         res.status(401).json({ msg: 'You cannot vote for your own comment.' })
       } else {
         comment.rating += vote
-        profile.votes.push({ vote: lookup[vote], commentId: commentId })
+        profile.votes.push({ vote: vote, commentId: commentId })
         await Promise.all([post.save(), profile.save()])
         res.status(200).json(comment)
       }
