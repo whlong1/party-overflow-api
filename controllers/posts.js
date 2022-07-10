@@ -141,15 +141,15 @@ const deleteComment = async (req, res) => {
 
 const castVote = async (req, res) => {
   try {
-    const vote = parseInt(req.body.vote)
+    const vote = req.body.vote
     const { postId, commentId } = req.params
-    const msg = vote === 1 ? 'upvote' : 'downvote'
-    console.log(':::::::::::::::::', msg)
     const profile = await Profile.findById(req.user.profile, 'votes')
     const prevVote = profile.votes.find((v) => v.commentId === commentId)
     if (prevVote) {
       if (prevVote.vote === vote) {
-        res.status(401).json({ msg: `You cannot ${msg} the same comment twice!` })
+        res.status(401).json({
+          msg: `You cannot ${vote === 1 ? 'upvote' : 'downvote'} the same comment twice!`
+        })
       } else {
         const post = await Post.findById(postId, 'comments')
         const comment = post.comments.id(commentId)
@@ -171,7 +171,6 @@ const castVote = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log('castVote',err)
     res.status(500).json(err)
   }
 }

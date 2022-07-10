@@ -9,7 +9,8 @@ function removeEmptyFields(req, res, next) {
 }
 
 function validateVote(req, res, next) {
-  return Math.abs(parseInt(req.body.vote)) === 1 ? next() : res.status(401).json({ msg: 'Invalid vote!' })
+  req.body.vote = parseInt(req.body.vote)
+  return Math.abs(req.body.vote) === 1 ? next() : res.status(401).json({ msg: 'Invalid vote!' })
 }
 
 export {

@@ -3,10 +3,9 @@ import mongoose from 'mongoose'
 const voteSchema = new mongoose.Schema({
   vote: {
     type: Number,
-    min: -1,
     max: 1,
+    min: -1,
     default: 1
-    // default: true
   },
   commentId: {
     type: String,
