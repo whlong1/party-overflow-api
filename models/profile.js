@@ -2,8 +2,10 @@ import mongoose from 'mongoose'
 
 const voteSchema = new mongoose.Schema({
   vote: {
-    type: Boolean,
-    default: true
+    type: Number,
+    max: 1,
+    min: -1,
+    default: 1
   },
   commentId: {
     type: String,

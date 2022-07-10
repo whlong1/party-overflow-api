@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import * as postCtrl from '../controllers/posts.js'
-import { attributeAuthor } from '../middleware/middleware.js'
+import { attributeAuthor, validateVote } from '../middleware/middleware.js'
 import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 
 const router = Router()
@@ -19,7 +19,7 @@ router.delete('/:id', checkAuth, postCtrl.delete)
 router.post('/:id/comments', checkAuth, attributeAuthor, postCtrl.createComment)
 router.put('/:postId/comments/:commentId', checkAuth, postCtrl.updateComment)
 router.delete('/:postId/comments/:commentId', checkAuth, postCtrl.deleteComment)
-router.post('/:postId/comments/:commentId', checkAuth, postCtrl.castVote)
+router.post('/:postId/comments/:commentId', checkAuth, validateVote, postCtrl.castVote)
 
 router.patch('/:id/views', checkAuth, postCtrl.incrementViews)
 router.post('/:id/bookmarks', checkAuth, postCtrl.bookmarkPost)
