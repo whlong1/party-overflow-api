@@ -165,7 +165,7 @@ const castVote = async (req, res) => {
         res.status(401).json({ msg: 'You cannot vote for your own comment.' })
       } else {
         comment.rating += vote
-        profile.votes.push({ vote: vote, commentId: commentId })
+        profile.votes.push({ vote: lookup[vote], commentId: commentId })
         await Promise.all([post.save(), profile.save()])
         res.status(200).json(comment)
       }
