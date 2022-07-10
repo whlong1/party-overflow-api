@@ -171,7 +171,7 @@ const castVote = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err)
+    console.log('castVote',err)
     res.status(500).json(err)
   }
 }
