@@ -90,6 +90,7 @@ const createComment = async (req, res) => {
     newComment.author = profile
     res.status(201).json(newComment)
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
