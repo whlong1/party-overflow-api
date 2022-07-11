@@ -17,19 +17,30 @@ const create = async (req, res) => {
 const index = async (req, res) => {
   try {
     const { search, page, limit, sort } = req.query
-    const filter = { text: { $regex: search, $options: 'i' } }
-    const fields = 'text codeblock author resolved views language'
-    const order = { recent: { createdAt: 'desc' }, popular: { comments: 'desc' } }
-    const posts = await Post.find(search ? filter : {}, fields)
-      .limit(limit)
-      .skip(parseInt(page) * limit)
-      .populate('author', 'name avatar')
-      .sort(sort ? order[sort] : order.recent)
+    const posts = await Post.findPosts(search, page, limit)
     res.status(200).json(posts)
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
+
+// const index = async (req, res) => {
+//   try {
+//     const { search, page, limit, sort } = req.query
+//     const filter = { text: { $regex: search, $options: 'i' } }
+//     const fields = 'text codeblock author resolved views language'
+//     const order = { recent: { createdAt: 'desc' }, popular: { comments: 'desc' } }
+//     const posts = await Post.find(search ? filter : {}, fields)
+//       .limit(limit)
+//       .skip(parseInt(page) * limit)
+//       .populate('author', 'name avatar')
+//       .sort(sort ? order[sort] : order.recent)
+//     res.status(200).json(posts)
+//   } catch (err) {
+//     res.status(500).json(err)
+//   }
+// }
 
 const show = async (req, res) => {
   try {

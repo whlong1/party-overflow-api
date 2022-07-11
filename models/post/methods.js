@@ -80,24 +80,39 @@ function findByIdAndSortComments(id, page, limit) {
   ])
 }
 
+
+const fields = 'text codeblock author resolved views language'
+
 function findPosts(search, page, limit) {
   return this.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(id) } },
+    // { $match: { _id: mongoose.Types.ObjectId(id) } },
     { $lookup: { from: 'profiles', localField: 'author', foreignField: '_id', as: 'author' } },
     { $unwind: '$author' },
     {
       $group: {
         _id: "$_id",
         text: { $first: "$text" },
-        codeblock: { $first: "$codeblock" },
-        resolved: { $first: "$resolved" },
-        language: { $first: "$language" },
         views: { $first: "$views" },
         author: { $first: "$author" },
+        resolved: { $first: "$resolved" },
         solution: { $first: "$solution" },
-        // comments: { $push: "$comments" },
+        language: { $first: "$language" },
+        codeblock: { $first: "$codeblock" },
       }
     },
+
+    {
+      $project: {
+        _id: 1,
+        text: 1,
+        codeblock: 1,
+        resolved: 1,
+        language: 1,
+        views: 1,
+        author: { _id: 1, name: 1, avatar: 1 },
+      }
+    }
+
   ])
 }
 
