@@ -13,12 +13,12 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const fields = '_id email name avatar solution count bookmarks following followers'
+    const fields = '_id email name avatar following followers solution_count.language'
     const profile = await Profile.findById(req.params.id, fields)
       .populate({
         limit: 8,
         path: 'posts',
-        options: { sort: { 'views': -1 } }, 
+        options: { sort: { 'views': -1 } },
         select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
       })
       .populate({
