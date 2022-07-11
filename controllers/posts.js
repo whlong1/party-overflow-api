@@ -107,7 +107,7 @@ const updateComment = async (req, res) => {
       await Promise.all([
         await post.save(),
         await Profile.updateOne(
-          { _id: req.user.profile },
+          { _id: comment.author._id },
           { $push: { solution_count: { language: post.language, post: post._id } } }
         )
       ])

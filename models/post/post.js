@@ -55,7 +55,6 @@ const postSchema = new Schema({
 }, { timestamps: true })
 
 postSchema.statics = postSchemaMethods
-
 const Post = mongoose.model('Post', postSchema)
 
 export {
