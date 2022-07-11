@@ -16,7 +16,7 @@ const show = async (req, res) => {
     const fields = 'email name avatar following followers solution_count.language'
     const profile = await Profile.findById(req.params.id, fields)
       .populate({
-        limit: 8,
+        limit: 10,
         path: 'posts',
         options: { sort: { 'views': -1 } },
         select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
@@ -26,6 +26,9 @@ const show = async (req, res) => {
         populate: { path: 'author', select: { 'name': 1, 'avatar': 1 } },
         select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1, 'author': 1 },
       })
+      .populate({ path: 'following', select: { 'name': 1, 'avatar': 1 } })
+      .populate({ path: 'followers', select: { 'name': 1, 'avatar': 1 } })
+      
     res.status(200).json(profile)
   } catch (err) {
     res.status(500).json(err)
