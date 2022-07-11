@@ -90,6 +90,7 @@ const createComment = async (req, res) => {
     newComment.author = profile
     res.status(201).json(newComment)
   } catch (err) {
+    console.log(err)
     res.status(500).json(err)
   }
 }
@@ -107,8 +108,8 @@ const updateComment = async (req, res) => {
       await Promise.all([
         await post.save(),
         await Profile.updateOne(
-          { _id: req.user.profile },
-          { $inc: { solution_count: 1 } }
+          { _id: comment.author._id },
+          { $push: { solution_count: { language: post.language, post: post._id } } }
         )
       ])
       res.status(200).json(post)

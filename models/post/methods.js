@@ -95,7 +95,6 @@ function findPosts(search, page, limit) {
         views: { $first: "$views" },
         author: { $first: "$author" },
         solution: { $first: "$solution" },
-        // comments: { $push: "$comments" },
       }
     },
   ])
