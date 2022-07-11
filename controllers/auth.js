@@ -1,5 +1,5 @@
 import { User } from '../models/user.js'
-import { Profile } from '../models/profile.js'
+import { Profile } from '../models/profile/profile.js'
 import jwt from 'jsonwebtoken'
 
 const createJWT = (user) => {
