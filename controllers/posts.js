@@ -1,4 +1,4 @@
-import { Profile } from "../models/profile.js"
+import { Profile } from "../models/profile/profile.js"
 import { Post } from "../models/post/post.js"
 
 const create = async (req, res) => {

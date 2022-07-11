@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import * as profileSchemaMethods from './methods.js'
 
 const voteSchema = new mongoose.Schema({
   vote: { type: Number, max: 1, min: -1, default: 1 },
@@ -35,6 +36,7 @@ const profileSchema = new mongoose.Schema({
   timestamps: true,
 })
 
+profileSchema.statics = profileSchemaMethods
 const Profile = mongoose.model('Profile', profileSchema)
 
 export { Profile }

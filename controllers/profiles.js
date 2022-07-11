@@ -1,4 +1,4 @@
-import { Profile } from "../models/profile.js"
+import { Profile } from "../models/profile/profile.js"
 
 const index = async (req, res) => {
   try {
@@ -56,7 +56,6 @@ const unfollow = async (req, res) => {
     res.status(500).json(err)
   }
 }
-
 
 export {
   index,
