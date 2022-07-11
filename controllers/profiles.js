@@ -2,7 +2,7 @@ import { Profile } from "../models/profile/profile.js"
 
 const index = async (req, res) => {
   try {
-    const profiles = await Profile.find({}, 'name avatar solution_count')
+    const profiles = await Profile.find({}, 'name avatar')
       .sort({ solution_count: -1 })
       .limit(10)
     res.status(200).json(profiles)
@@ -13,7 +13,7 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const fields = '_id email name avatar following followers solution_count.language'
+    const fields = 'email name avatar following followers solution_count.language'
     const profile = await Profile.findById(req.params.id, fields)
       .populate({
         limit: 8,
