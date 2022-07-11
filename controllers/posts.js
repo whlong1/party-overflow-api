@@ -108,7 +108,7 @@ const updateComment = async (req, res) => {
         await post.save(),
         await Profile.updateOne(
           { _id: req.user.profile },
-          { $push: { solution_count: {} } }
+          { $push: { solution_count: { language: post.language, post: post._id } } }
         )
       ])
       res.status(200).json(post)
