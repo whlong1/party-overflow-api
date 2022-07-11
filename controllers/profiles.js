@@ -22,8 +22,9 @@ const show = async (req, res) => {
         select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
       })
       .populate({
-        path: 'bookmarks.author',
-        select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1 },
+        path: 'bookmarks',
+        populate: { path: 'author', select: { 'name': 1, 'avatar': 1 } },
+        select: { '_id': 1, 'text': 1, 'views': 1, 'language': 1, 'resolved': 1, 'author': 1 },
       })
     res.status(200).json(profile)
   } catch (err) {
