@@ -19,12 +19,13 @@ router.delete('/:id', checkAuth, postCtrl.delete)
 router.post('/:id/comments', checkAuth, attributeAuthor, postCtrl.createComment)
 router.put('/:postId/comments/:commentId', checkAuth, postCtrl.updateComment)
 router.delete('/:postId/comments/:commentId', checkAuth, postCtrl.deleteComment)
-router.post('/:postId/comments/:commentId', checkAuth, validateVote, postCtrl.castVote)
 
 router.patch('/:id/views', checkAuth, postCtrl.incrementViews)
 router.post('/:id/bookmarks', checkAuth, postCtrl.bookmarkPost)
 router.delete('/:id/bookmarks', checkAuth, postCtrl.removeBookmark)
 
+router.post('/:postId/comments/:commentId/upvote', checkAuth, validateVote, postCtrl.upVote)
+router.post('/:postId/comments/:commentId/downvote', checkAuth, validateVote, postCtrl.downVote)
 
 export {
     router

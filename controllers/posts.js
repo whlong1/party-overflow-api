@@ -141,42 +141,6 @@ const deleteComment = async (req, res) => {
   }
 }
 
-const castVote = async (req, res) => {
-  try {
-    const vote = req.body.vote
-    const { postId, commentId } = req.params
-    const profile = await Profile.findById(req.user.profile, 'votes')
-    const prevVote = profile.votes.find((v) => v.commentId === commentId)
-    if (prevVote) {
-      if (prevVote.vote === vote) {
-        res.status(401).json({
-          msg: `You cannot ${vote === 1 ? 'upvote' : 'downvote'} the same comment twice!`
-        })
-      } else {
-        const post = await Post.findById(postId, 'comments')
-        const comment = post.comments.id(commentId)
-        comment.rating += vote
-        prevVote.vote = vote
-        await Promise.all([post.save(), profile.save()])
-        res.status(200).json(comment)
-      }
-    } else {
-      const post = await Post.findById(postId, 'comments')
-      const comment = post.comments.id(commentId)
-      if (comment.author.equals(req.user.profile)) {
-        res.status(401).json({ msg: 'You cannot vote for your own comment.' })
-      } else {
-        comment.rating += vote
-        profile.votes.push({ vote: vote, commentId: commentId })
-        await Promise.all([post.save(), profile.save()])
-        res.status(200).json(comment)
-      }
-    }
-  } catch (err) {
-    res.status(500).json(err)
-  }
-}
-
 const incrementViews = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id, 'views viewers author')
@@ -220,6 +184,64 @@ const removeBookmark = async (req, res) => {
   }
 }
 
+
+const castVote = async (req, res) => {
+  try {
+    const vote = req.body.vote
+    const { postId, commentId } = req.params
+    const profile = await Profile.findById(req.user.profile, 'votes')
+    const prevVote = profile.votes.find((v) => v.commentId === commentId)
+    if (prevVote) {
+      if (prevVote.vote === vote) {
+        res.status(401).json({
+          msg: `You cannot ${vote === 1 ? 'upvote' : 'downvote'} the same comment twice!`
+        })
+      } else {
+        const post = await Post.findById(postId, 'comments')
+        const comment = post.comments.id(commentId)
+        comment.rating += vote
+        prevVote.vote = vote
+        await Promise.all([post.save(), profile.save()])
+        res.status(200).json(comment)
+      }
+    } else {
+      const post = await Post.findById(postId, 'comments')
+      const comment = post.comments.id(commentId)
+      if (comment.author.equals(req.user.profile)) {
+        res.status(401).json({ msg: 'You cannot vote for your own comment.' })
+      } else {
+        comment.rating += vote
+        profile.votes.push({ vote: vote, commentId: commentId })
+        await Promise.all([post.save(), profile.save()])
+        res.status(200).json(comment)
+      }
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const upvote = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
+const downvote = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
+
+
+
 export {
   index,
   create,
@@ -229,8 +251,9 @@ export {
   createComment,
   updateComment,
   deleteComment,
-  castVote,
   incrementViews,
   bookmarkPost,
-  removeBookmark
+  removeBookmark,
+  upvote,
+  downvote
 }
