@@ -217,7 +217,7 @@ const undoVote = async (req, res) => {
     const post = await Post.findById(postId, 'comments')
     const comment = post.comments.id(commentId)
     const prev = profile.votes.find((v) => v.commentId === commentId)
-    if (!prev) { return res.status(401).json({ msg: 'Vote note found!' }) }
+    if (!prev) { return res.status(404).json({ msg: 'Vote note found!' }) }
     comment.rating -= prev.vote
     profile.votes.remove({ _id: prev._id })
     await Promise.all([post.save(), profile.save()])
