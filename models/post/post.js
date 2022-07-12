@@ -52,7 +52,9 @@ const postSchema = new Schema({
   comments: [commentSchema],
   viewers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Profile', required: true }
-}, { timestamps: true })
+},
+  { timestamps: true }
+)
 
 postSchema.statics = postSchemaMethods
 const Post = mongoose.model('Post', postSchema)
