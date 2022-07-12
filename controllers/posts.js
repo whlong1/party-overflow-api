@@ -184,9 +184,6 @@ const removeBookmark = async (req, res) => {
   }
 }
 
-
-
-
 const castVote = async (req, res) => {
   try {
     const vote = req.body.vote
@@ -207,13 +204,25 @@ const castVote = async (req, res) => {
     await Promise.all([post.save(), profile.save()])
     res.status(200).json(comment)
   } catch (err) {
-    console.log(err)
     res.status(500).json(err)
   }
 }
 
 const undoVote = async (req, res) => {
- 
+  try {
+    const { postId, commentId } = req.params
+    const profile = await Profile.findById(req.user.profile, 'votes')
+    const post = await Post.findById(postId, 'comments')
+    const comment = post.comments.id(commentId)
+    const prev = profile.votes.find((v) => v.commentId === commentId)
+    if (!prev) { return res.status(401).json({ msg: 'Vote note found!' }) }
+    comment.rating -= prev.vote
+    profile.votes.remove({ _id: prev._id })
+    await Promise.all([post.save(), profile.save()])
+    res.status(200).json(comment)
+  } catch (err) {
+    res.status(500).json(err)
+  }
 }
 
 
