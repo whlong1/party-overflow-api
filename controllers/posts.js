@@ -101,19 +101,21 @@ const updateComment = async (req, res) => {
       .populate('author').populate('comments.author')
     const comment = post.comments.id(req.params.commentId)
     if (!post.author.equals(req.user.profile)) {
-      res.status(401).json({ msg: 'Unauthorized' })
-    } else {
-      post.resolved = true
-      comment.solution = true
-      await Promise.all([
-        await post.save(),
-        await Profile.updateOne(
-          { _id: comment.author._id },
-          { $push: { solution_count: { language: post.language, post: post._id } } }
-        )
-      ])
-      res.status(200).json(post)
+      return res.status(401).json({ msg: 'Unauthorized' })
     }
+    if (comment.author._id.equals(req.user.profile)) {
+      return res.status(401).json({ msg: 'Unauthorized' })
+    }
+    post.resolved = true
+    comment.solution = true
+    await Promise.all([
+      await post.save(),
+      await Profile.updateOne(
+        { _id: comment.author._id },
+        { $push: { solution_count: { language: post.language, post: post._id } } }
+      )
+    ])
+    res.status(200).json(post)
   } catch (err) {
     res.status(500).json(err)
   }
@@ -224,11 +226,6 @@ const undoVote = async (req, res) => {
     res.status(500).json(err)
   }
 }
-
-
-
-
-
 
 export {
   index,
