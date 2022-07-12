@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import * as groupSchemaMethods from './methods.js'
+import * as guildSchemaMethods from './methods.js'
 
 const Schema = mongoose.Schema
 
-const groupSchema = new Schema({
+const guildSchema = new Schema({
   name: { type: String, required: true },
   banner: { type: String, required: true },
   public: { type: Boolean, default: false },
@@ -16,9 +16,9 @@ const groupSchema = new Schema({
 )
 
 
-groupSchema.statics = groupSchemaMethods
-const Group = mongoose.model('Group', groupSchema)
+guildSchema.statics = guildSchemaMethods
+const Guild = mongoose.model('Guild', guildSchema)
 
 export {
-  Group
+  Guild
 }
