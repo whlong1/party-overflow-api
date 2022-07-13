@@ -8,6 +8,7 @@ import { removeEmptyFields } from './middleware/middleware.js'
 
 // Import Routers
 import { router as authRouter } from './routes/auth.js'
+import { route as guildsRouter } from './routes/guilds.js'
 import { router as postsRouter } from './routes/posts.js'
 import { router as profilesRouter } from './routes/profiles.js'
 
@@ -23,6 +24,7 @@ app.use(removeEmptyFields)
 
 app.use('/api/auth', authRouter)
 app.use('/api/posts', postsRouter)
+app.use('/api/guilds', guildsRouter)
 app.use('/api/profiles', profilesRouter)
 
 app.use(function (req, res, next) {
