@@ -7,7 +7,6 @@ const guildSchema = new Schema({
   name: { type: String, required: true },
   banner: { type: String, required: true },
   public: { type: Boolean, default: false },
-  blogs: [{ type: mongoose.Types.ObjectId, ref: 'Blog' }],
   members: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
   waitlist: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
   administrators: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
