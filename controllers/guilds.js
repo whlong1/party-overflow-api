@@ -17,8 +17,27 @@ const show = async (req, res) => {
   }
 }
 
+const create = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const update = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
 
 export {
   index,
-  show
+  show,
+  create,
+  update
 }

@@ -12,6 +12,8 @@ router.use(decodeUserFromToken)
 
 router.get('/', guildCtrl.index)
 router.get('/:id', guildCtrl.show)
+router.post('/', guildCtrl.create)
+router.put('/:', guildCtrl.update)
 
 
 export {
