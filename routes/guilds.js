@@ -7,16 +7,15 @@ import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 const router = Router()
 
 // ========= Public Routes ========= 
-
+router.get('/', guildCtrl.index)
 
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 
+router.get('/:id', checkAuth, guildCtrl.show)
+router.put('/:id', checkAuth, guildCtrl.update)
 router.post('/', checkAuth, createAdmin, guildCtrl.create)
 
-router.get('/', checkAuth, guildCtrl.index)
-router.get('/:id', checkAuth, guildCtrl.show)
-router.put('/:', checkAuth, guildCtrl.update)
 
 
 export {
