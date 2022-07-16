@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import * as guildCtrl from '../controllers/guilds.js'
+import { createAdmin } from '../middleware/middleware.js'
 import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
+
 
 const router = Router()
 
@@ -10,9 +12,10 @@ const router = Router()
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 
+router.post('/', checkAuth, createAdmin, guildCtrl.create)
+
 router.get('/', checkAuth, guildCtrl.index)
 router.get('/:id', checkAuth, guildCtrl.show)
-router.post('/', checkAuth, guildCtrl.create)
 router.put('/:', checkAuth, guildCtrl.update)
 
 

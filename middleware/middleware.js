@@ -13,8 +13,16 @@ function validateVote(req, res, next) {
   return Math.abs(req.body.vote) === 1 ? next() : res.status(401).json({ msg: 'Invalid vote!' })
 }
 
+
+function createAdmin(req, res, next){
+  req.body.members = req.user.profile
+  req.body.administrators = req.user.profile
+  next()
+}
+
 export {
   validateVote,
   attributeAuthor,
   removeEmptyFields,
+  createAdmin
 }

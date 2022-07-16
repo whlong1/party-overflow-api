@@ -29,6 +29,7 @@ const profileSchema = new mongoose.Schema({
   votes: [voteSchema],
   solution_count: [solutionSchema],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+  guilds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Guild' }],
   bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }]

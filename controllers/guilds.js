@@ -1,4 +1,5 @@
 import { Guild } from "../models/guild/guild.js"
+import { Profile } from "../models/profile/profile.js"
 
 const index = async (req, res) => {
   try {
@@ -20,6 +21,10 @@ const show = async (req, res) => {
 const create = async (req, res) => {
   try {
     const guild = await Guild.create(req.body)
+    await Profile.updateOne(
+      { _id: req.user.profile },
+      { $push: { guilds: guild } }
+    )
     res.status(201).json(guild)
   } catch (err) {
     res.status(500).json(err)
