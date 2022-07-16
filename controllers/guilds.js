@@ -19,7 +19,8 @@ const show = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-
+    const guild = await Guild.create(req.body)
+    res.status(201).json(guild)
   } catch (err) {
     res.status(500).json(err)
   }

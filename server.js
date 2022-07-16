@@ -8,7 +8,7 @@ import { removeEmptyFields } from './middleware/middleware.js'
 
 // Import Routers
 import { router as authRouter } from './routes/auth.js'
-import { route as guildsRouter } from './routes/guilds.js'
+import { router as guildsRouter } from './routes/guilds.js'
 import { router as postsRouter } from './routes/posts.js'
 import { router as profilesRouter } from './routes/profiles.js'
 
