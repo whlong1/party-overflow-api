@@ -15,7 +15,6 @@ const guildSchema = new Schema({
   { timestamps: true }
 )
 
-
 guildSchema.statics = guildSchemaMethods
 const Guild = mongoose.model('Guild', guildSchema)
 
