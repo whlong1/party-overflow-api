@@ -10,10 +10,10 @@ const router = Router()
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 
-router.get('/', guildCtrl.index)
-router.get('/:id', guildCtrl.show)
-router.post('/', guildCtrl.create)
-router.put('/:', guildCtrl.update)
+router.get('/', checkAuth, guildCtrl.index)
+router.get('/:id', checkAuth, guildCtrl.show)
+router.post('/', checkAuth, guildCtrl.create)
+router.put('/:', checkAuth, guildCtrl.update)
 
 
 export {
