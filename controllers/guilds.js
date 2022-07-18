@@ -21,7 +21,8 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-
+    const guild = await Guild.findWithLinkedData(req.params.id)
+    res.status(200).json(guild)
   } catch (err) {
     res.status(500).json(err)
   }

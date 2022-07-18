@@ -9,7 +9,7 @@ const guildSchema = new Schema({
   public: { type: Boolean, default: false },
   members: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
   waitlist: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
-  administrators: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }],
+  administrators: [{ type: mongoose.Types.ObjectId, ref: 'Profile' }]
 },
   { timestamps: true }
 )
