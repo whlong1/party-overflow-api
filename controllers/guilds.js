@@ -43,7 +43,11 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const guild = await Guild.findByIdAndUpdate(req.params.id, req.body)
+    const guild = await Guild.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    )
     res.status(200).json(guild)
   } catch (err) {
     res.status(500).json(err)
