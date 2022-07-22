@@ -78,6 +78,14 @@ const denyMembership = async (req, res) => {
   }
 }
 
+const addAdmin = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 export {
   index,
   show,
@@ -85,5 +93,6 @@ export {
   update,
   requestMembership,
   approveMembership,
-  denyMembership
+  denyMembership,
+  addAdmin
 }
