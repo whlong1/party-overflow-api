@@ -27,6 +27,4 @@ router.delete('/:id/bookmarks', checkAuth, postCtrl.removeBookmark)
 router.post('/:postId/comments/:commentId/votes', checkAuth, validateVote, postCtrl.castVote)
 router.delete('/:postId/comments/:commentId/votes', checkAuth, postCtrl.undoVote)
 
-export {
-    router
-}
+export { router }
