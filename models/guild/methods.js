@@ -20,6 +20,8 @@ function findWithLinkedData(id) {
         members: { $push: { _id: "$m._id", name: "$m.name", avatar: "$m.avatar" } },
         waitlist: { $push: { _id: "$w._id", name: "$w.name", avatar: "$w.avatar" } },
         administrators: { $push: { _id: "$a._id", name: "$a.name", avatar: "$a.avatar" } },
+
+        collectiveScore: { $sum: "$members.solution_count" },
       }
     },
   ])

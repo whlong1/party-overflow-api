@@ -54,9 +54,28 @@ const update = async (req, res) => {
   }
 }
 
+
+const requestMembership = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const approveMembership = async (req, res) => {
+  try {
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+
 export {
   index,
   show,
   create,
-  update
+  update,
+  requestMembership
 }
