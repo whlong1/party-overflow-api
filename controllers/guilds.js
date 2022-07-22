@@ -56,7 +56,11 @@ const update = async (req, res) => {
 
 const requestMembership = async (req, res) => {
   try {
-
+    await Guild.updateOne(
+      { _id: req.params.id },
+      { $push: { waitlist: req.user.profile } }
+    )
+    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
@@ -64,7 +68,11 @@ const requestMembership = async (req, res) => {
 
 const approveMembership = async (req, res) => {
   try {
-
+    await Guild.updateOne(
+      { _id: req.params.id },
+      { $push: { members: req.params.profileId } }
+    )
+    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
@@ -72,7 +80,11 @@ const approveMembership = async (req, res) => {
 
 const denyMembership = async (req, res) => {
   try {
-
+    await Guild.updateOne(
+      { _id: req.params.id },
+      { $pull: { waitlist: req.params.profileId } }
+    )
+    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
@@ -80,7 +92,11 @@ const denyMembership = async (req, res) => {
 
 const addAdmin = async (req, res) => {
   try {
-
+    await Guild.updateOne(
+      { _id: req.params.id },
+      { $push: { administrators: req.params.profileId } }
+    )
+    res.status(200).send('OK')
   } catch (err) {
     res.status(500).json(err)
   }
