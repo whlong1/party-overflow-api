@@ -15,7 +15,10 @@ function findByIdAndSortComments(id, page, limit) {
       $lookup: {
         from: "profiles",
         let: { authorId: "$comments.author" },
-        pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$authorId'] } } }, { $project: { _id: 1, name: 1, avatar: 1 } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$_id', '$$authorId'] } } },
+          { $project: { _id: 1, name: 1, avatar: 1 } }
+        ],
         as: 'comments.author',
       }
     },
@@ -43,7 +46,17 @@ function findByIdAndSortComments(id, page, limit) {
       }
     },
     // Find existing solution:
-    { $addFields: { solution: { $filter: { input: "$comments", as: "comment", cond: { $eq: ["$$comment.solution", true] } } } } },
+    {
+      $addFields: {
+        solution: {
+          $filter: {
+            input: "$comments",
+            as: "comment",
+            cond: { $eq: ["$$comment.solution", true] }
+          }
+        }
+      }
+    },
     // Sort comments by rating:
     { $unwind: { path: "$comments", preserveNullAndEmptyArrays: true } },
     { $sort: { "comments.rating": -1 } },
@@ -62,7 +75,13 @@ function findByIdAndSortComments(id, page, limit) {
       }
     },
     // Remove existing solution from comments array:
-    { $addFields: { comments: { $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } } } } },
+    {
+      $addFields: {
+        comments: {
+          $filter: { input: "$comments", as: "comment", cond: { $ne: ["$$comment.solution", true] } }
+        }
+      }
+    },
     // Clean up returned fields and apply comment pagination:
     {
       $project: {
