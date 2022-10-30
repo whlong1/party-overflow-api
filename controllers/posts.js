@@ -68,9 +68,9 @@ const deletePost = async (req, res) => {
       const profile = await Profile.findById(req.user.profile)
       profile.posts.remove({ _id: req.params.id })
       await Promise.all([
-        await post.delete(),
-        await profile.save(),
-        await Profile.updateMany({}, { $pull: { bookmarks: req.params.id } })
+        post.delete(),
+        profile.save(),
+        Profile.updateMany({}, { $pull: { bookmarks: req.params.id } })
       ])
       res.status(200).send('OK')
     }
@@ -109,8 +109,8 @@ const updateComment = async (req, res) => {
     post.resolved = true
     comment.solution = true
     await Promise.all([
-      await post.save(),
-      await Profile.updateOne(
+      post.save(),
+      Profile.updateOne(
         { _id: comment.author._id },
         { $push: { solution_count: { language: post.language, post: post._id } } }
       )
@@ -130,8 +130,8 @@ const deleteComment = async (req, res) => {
     } else {
       post.comments.remove({ _id: req.params.commentId })
       await Promise.all([
-        await post.save(),
-        await Profile.updateMany({},
+        post.save(),
+        Profile.updateMany({},
           { $pull: { votes: { commentId: req.params.commentId } } }
         )
       ])
